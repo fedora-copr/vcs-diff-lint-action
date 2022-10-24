@@ -1,5 +1,7 @@
 #! /bin/bash -ex
 
+# Rebuild-bump: 0
+
 git config --global --add safe.directory '*'
 git config --global advice.detachedHead false
 git fetch origin main:main

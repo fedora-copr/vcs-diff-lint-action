@@ -1,0 +1,11 @@
+---
+name: VCS Diff Lint
+description: Differential code linting action
+
+branding:
+  icon: check-circle
+  color: blue
+
+runs:
+  using: docker
+  image: quay.io/copr/vcs-diff-lint:latest

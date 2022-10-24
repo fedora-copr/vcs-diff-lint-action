@@ -1,0 +1,7 @@
+#! /bin/bash -ex
+
+git config --global --add safe.directory '*'
+git config --global advice.detachedHead false
+git fetch origin main:main
+test -n "$SUBDIR" || cd "$SUBDIR"
+exec vcs-diff-lint --print-fixed-errors

@@ -3,5 +3,5 @@
 git config --global --add safe.directory '*'
 git config --global advice.detachedHead false
 git fetch origin main:main
-test -n "$INPUT_SUBDIRECTORY" || cd "$INPUT_SUBDIRECTORY"
+test -z "$INPUT_SUBDIRECTORY" || cd "$INPUT_SUBDIRECTORY"
 exec vcs-diff-lint --print-fixed-errors

@@ -6,6 +6,11 @@ branding:
   icon: check-circle
   color: blue
 
+inputs:
+  subdirectory:
+    description: Sub-directory to step in, before linting is performed
+    required: false
+
 runs:
   using: docker
-  image: quay.io/copr/vcs-diff-lint:latest
+  image: docker://quay.io/copr/vcs-diff-lint:latest

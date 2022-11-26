@@ -11,6 +11,12 @@ inputs:
     description: Sub-directory to step in, before linting is performed
     required: false
 
+  subdirectories:
+    description: |
+      Space separated list of sub-directories to analyze.  The linter is
+      executed multiple times, for each sub-diretory separately.
+    required: false
+
 runs:
   using: docker
   image: docker://quay.io/copr/vcs-diff-lint:latest

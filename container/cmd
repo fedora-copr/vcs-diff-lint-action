@@ -1,9 +1,27 @@
-#! /bin/bash -ex
+#! /bin/bash -e
 
 # Rebuild-bump: 2
+
+case $INPUT_DEBUG in
+    true|True|TRUE) set -x ;;
+esac
+
+linter_options=()
+set_linter_options()
+{
+    case $INPUT_DEBUG in
+    true|True|TRUE)
+        linter_options+=( --log-level=debug )
+        ;;
+    esac
+    for tag in $INPUT_LINTER_TAGS; do
+        linter_options+=( --linter-tag "$tag" )
+    done
+}
 
 git config --global --add safe.directory '*'
 git config --global advice.detachedHead false
 git fetch origin main:main
 test -z "$INPUT_SUBDIRECTORY" || cd "$INPUT_SUBDIRECTORY"
-exec vcs-diff-lint --print-fixed-errors
+set_linter_options
+exec vcs-diff-lint --print-fixed-errors "${linter_options[@]}"

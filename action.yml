@@ -11,6 +11,18 @@ inputs:
     description: Sub-directory to step in, before linting is performed
     required: false
 
+  linter_tags:
+    description: |
+      Comma-separated list of linter tags (selectors) for the `vcs-diff-lint`
+      utility (see the `--linter-tags` option).  By default all linters are
+      selected.  Avaliable linter tags are `mypy`, `pylint`, and `python`.
+    required: false
+
+  debug:
+    description: Turn on debugging info.
+    default: false
+    required: false
+
 runs:
   using: docker
   image: docker://quay.io/copr/vcs-diff-lint:latest

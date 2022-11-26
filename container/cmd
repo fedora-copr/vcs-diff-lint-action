@@ -8,6 +8,23 @@ result=true
 info() { echo "DIFF_LINT_INFO: $*" >&2 ; }
 error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
 
+case $INPUT_DEBUG in
+    true|True|TRUE) set -x ;;
+esac
+
+linter_options=()
+set_linter_options()
+{
+    case $INPUT_DEBUG in
+    true|True|TRUE)
+        linter_options+=( --log-level=debug )
+        ;;
+    esac
+    for tag in $INPUT_LINTER_TAGS; do
+        linter_options+=( --linter-tag "$tag" )
+    done
+}
+
 analyze_subdir()
 {
     info "Linting in '$1' subdirectory"
@@ -16,7 +33,7 @@ analyze_subdir()
         result=false
         return
     }
-    vcs-diff-lint --print-fixed-errors || result=false
+    vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
 }
 
 git config --global --add safe.directory '*'

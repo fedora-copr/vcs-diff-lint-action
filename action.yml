@@ -8,13 +8,17 @@ branding:
 
 inputs:
   subdirectory:
-    description: Sub-directory to step in, before linting is performed
+    description: |
+      Sub-directory to step in before the linting is performed.  The
+      sub-directory must contain the `.vcs-diff-lint.yml` file, or RPM spec
+      file.
     required: false
 
   subdirectories:
     description: |
-      Space separated list of sub-directories to analyze.  The linter is
-      executed multiple times, for each sub-diretory separately.
+      Equivalent to `subdirectory` option, but multiplied.  Space separated list
+      of sub-directories to analyze.  The linter is executed multiple times, for
+      each sub-diretory separately.
     required: false
 
   linter_tags:

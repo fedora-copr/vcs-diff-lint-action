@@ -1,6 +1,6 @@
 #! /bin/bash -e
 
-# Rebuild-bump: 0
+# Rebuild-bump: 1
 
 rootdir=$(pwd)
 result=true

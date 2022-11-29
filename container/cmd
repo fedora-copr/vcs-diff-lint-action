@@ -5,7 +5,6 @@
 rootdir=$(pwd)
 result=true
 
-info() { echo "DIFF_LINT_INFO: $*" >&2 ; }
 error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
 
 case $INPUT_DEBUG in
@@ -27,7 +26,9 @@ set_linter_options()
 
 analyze_subdir()
 {
-    info "Linting in '$1' subdirectory"
+    echo
+    echo "## Linting in '$1' subdirectory ##"
+    echo
     cd "$rootdir/$1" 2>/dev/null || {
         error "Directory '$1' not found"
         result=false

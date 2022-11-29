@@ -43,6 +43,7 @@ git fetch origin main:main
 test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
 test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.
 
+set_linter_options
 for subdir in $INPUT_SUBDIRECTORIES; do
     analyze_subdir "$subdir"
 done

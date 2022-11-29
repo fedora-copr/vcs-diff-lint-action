@@ -38,7 +38,7 @@ analyze_subdir()
 
 git config --global --add safe.directory '*'
 git config --global advice.detachedHead false
-git fetch origin main:main
+git fetch origin main:main &>/dev/null
 
 test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
 test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.

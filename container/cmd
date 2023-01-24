@@ -1,11 +1,13 @@
 #! /bin/bash -e
 
-# Rebuild-bump: 2
+# Rebuild-bump: 0
 
 rootdir=$(pwd)
 result=true
 
 error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
+
+target_branch=${GITHUB_HEAD_REF-main}
 
 case $INPUT_DEBUG in
     true|True|TRUE) set -x ;;
@@ -22,6 +24,9 @@ set_linter_options()
     for tag in $INPUT_LINTER_TAGS; do
         linter_options+=( --linter-tag "$tag" )
     done
+    if test "$target_branch" != main; then
+        linter_options+=( --compare-against "origin/$target_branch" )
+    fi
 }
 
 analyze_subdir()
@@ -39,7 +44,7 @@ analyze_subdir()
 
 git config --global --add safe.directory '*'
 git config --global advice.detachedHead false
-git fetch origin main:main &>/dev/null
+git fetch origin "$target_branch:$target_branch" &>/dev/null
 
 test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
 test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.

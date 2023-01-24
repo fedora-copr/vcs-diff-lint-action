@@ -7,7 +7,7 @@ result=true
 
 error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
 
-target_branch=${GITHUB_HEAD_REF-main}
+target_branch=${GITHUB_BASE_REF-main}
 
 case $INPUT_DEBUG in
     true|True|TRUE) set -x ;;

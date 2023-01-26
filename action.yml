@@ -30,7 +30,7 @@ inputs:
 
   debug:
     description: Turn on debugging info.
-    default: false
+    default: 'false'
     required: false
 
 runs:

@@ -9,23 +9,23 @@ branding:
 inputs:
   subdirectory:
     description: |
-      Sub-directory to step in before the linting is performed.  The
+      Sub-directory to step in before the linting is performed. The
       sub-directory must contain the `.vcs-diff-lint.yml` file, or RPM spec
       file.
     required: false
 
   subdirectories:
     description: |
-      Equivalent to `subdirectory` option, but multiplied.  Space separated list
-      of sub-directories to analyze.  The linter is executed multiple times, for
+      Equivalent to `subdirectory` option, but multiplied. Space separated list
+      of sub-directories to analyze. The linter is executed multiple times, for
       each sub-diretory separately.
     required: false
 
   linter_tags:
     description: |
       Comma-separated list of linter tags (selectors) for the `vcs-diff-lint`
-      utility (see the `--linter-tags` option).  By default all linters are
-      selected.  Avaliable linter tags are `mypy`, `pylint`, and `python`.
+      utility (see the `--linter-tags` option). By default all linters are
+      selected. Avaliable linter tags are `mypy`, `pylint`, and `python`.
     required: false
 
   debug:

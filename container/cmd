@@ -39,6 +39,17 @@ set_linter_options()
     fi
 }
 
+get_pure_defects()
+{
+    set +e
+    if [[ -z "${linter_options[*]/--log-level=debug}" ]]; then
+        vcs-diff-lint >> defects.log
+    else
+        vcs-diff-lint "${linter_options[@]}" >> defects.log
+    fi
+    set -e
+}
+
 analyze_subdir()
 {
     echo
@@ -49,6 +60,7 @@ analyze_subdir()
         result=false
         return
     }
+    get_pure_defects
     vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
 }
 
@@ -63,5 +75,13 @@ set_linter_options
 for subdir in $INPUT_SUBDIRECTORIES; do
     analyze_subdir "$subdir"
 done
+
+csgrep \
+    --strip-path-prefix "./" \
+    --mode=sarif \
+    --set-scan-prop="tool:vcs-diff-lint" \
+    --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
+    "defects.log" > output.sarif
+echo "sarif=output.sarif" >> "${GITHUB_OUTPUT}"
 
 $result

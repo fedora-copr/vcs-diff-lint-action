@@ -18,12 +18,34 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
     steps:
       - name: Repository checkout
         uses: actions/checkout@v3
 
-      - name: VCS Diff Lint
+      - id: VCS_Diff_Lint
+        name: VCS Diff Lint
         uses: fedora-copr/vcs-diff-lint-action@v1
+
+      - if: ${{ always() }}
+        name: Upload artifact with detected defects in SARIF format
+        uses: actions/upload-artifact@v3
+        with:
+          name: VCS Diff Lint SARIF
+          path: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
+
+      - if: ${{ always() }}
+        name: Upload SARIF to GitHub using github/codeql-action/upload-sarif
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
 ```
 
 ## Options
@@ -69,3 +91,11 @@ Turn on debugging info.
 
 * default value: `false`
 * requirements: `optional`
+
+## Outputs
+
+VCS Diff Lint GitHub Action exposes following [outputs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs).
+
+### sarif
+
+Relative path to SARIF file containing detected defects.

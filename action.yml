@@ -33,6 +33,10 @@ inputs:
     default: 'false'
     required: false
 
+outputs:
+  sarif:
+    description: 'The SARIF file containing defects'
+
 runs:
   using: docker
   image: docker://quay.io/copr/vcs-diff-lint:latest

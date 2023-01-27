@@ -9,18 +9,28 @@ error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
 
 target_branch=${GITHUB_BASE_REF-main}
 
-case $INPUT_DEBUG in
-    true|True|TRUE) set -x ;;
-esac
+is_true() {
+    [[ $# -le 0 ]] && return 1
+
+    case "$1" in
+      [tT] | [yY] | [yY][eE][sS] | [oO][nN] | [tT][rR][uU][eE] | 1)
+        return 0
+        ;;
+
+      *)
+        return 1
+        ;;
+    esac
+}
+
+is_true "$INPUT_DEBUG" && set -x
 
 linter_options=()
 set_linter_options()
 {
-    case $INPUT_DEBUG in
-    true|True|TRUE)
+    if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
         linter_options+=( --log-level=debug )
-        ;;
-    esac
+    fi
     for tag in $INPUT_LINTER_TAGS; do
         linter_options+=( --linter-tag "$tag" )
     done

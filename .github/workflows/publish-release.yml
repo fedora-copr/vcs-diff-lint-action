@@ -3,6 +3,8 @@
 name: GitHub Tag Update
 
 on:
+  push:
+    tags: [ v*.*.* ]
   release:
     types: [ published, edited ]
 

@@ -39,15 +39,17 @@ set_linter_options()
     fi
 }
 
-get_pure_defects()
+populate_sarif_data()
 {
-    set +e
-    if [[ -z "${linter_options[*]/--log-level=debug}" ]]; then
-        vcs-diff-lint >> defects.log
-    else
-        vcs-diff-lint "${linter_options[@]}" >> defects.log
-    fi
-    set -e
+    vcs-diff-lint "${linter_options[@]}" 2>/dev/null | \
+    csgrep \
+        --strip-path-prefix ./ \
+        --prepend-path-prefix "$1/" \
+        --mode=sarif \
+        --set-scan-prop="tool:vcs-diff-lint" \
+        --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
+        "defects.log" >> "$rootdir/output.sarif" \
+    || true
 }
 
 analyze_subdir()
@@ -60,7 +62,7 @@ analyze_subdir()
         result=false
         return
     }
-    get_pure_defects
+    populate_sarif_data "$1"
     vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
 }
 
@@ -76,12 +78,6 @@ for subdir in $INPUT_SUBDIRECTORIES; do
     analyze_subdir "$subdir"
 done
 
-csgrep \
-    --strip-path-prefix "./" \
-    --mode=sarif \
-    --set-scan-prop="tool:vcs-diff-lint" \
-    --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
-    "defects.log" > "$rootdir/output.sarif"
 echo "sarif=output.sarif" >> "${GITHUB_OUTPUT}"
 
 $result

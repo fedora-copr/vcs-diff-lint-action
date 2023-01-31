@@ -41,7 +41,7 @@ jobs:
           name: VCS Diff Lint SARIF
           path: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
 
-      - if: ${{ always() }}
+      - if: ${{ failure() }}
         name: Upload SARIF to GitHub using github/codeql-action/upload-sarif
         uses: github/codeql-action/upload-sarif@v2
         with:

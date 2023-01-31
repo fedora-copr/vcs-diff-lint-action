@@ -82,6 +82,6 @@ csgrep \
     --set-scan-prop="tool:vcs-diff-lint" \
     --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
     "defects.log" > output.sarif
-echo "sarif=output.sarif" >> "${GITHUB_OUTPUT}"
+echo "sarif=$rootdir/output.sarif" >> "${GITHUB_OUTPUT}"
 
 $result

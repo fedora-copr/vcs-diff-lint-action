@@ -45,10 +45,7 @@ populate_sarif_data()
     csgrep \
         --strip-path-prefix ./ \
         --prepend-path-prefix "$1/" \
-        --mode=sarif \
-        --set-scan-prop="tool:vcs-diff-lint" \
-        --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
-        >> "$rootdir/output.sarif" \
+        >> "$rootdir/output.sarif.err" \
     || true
 }
 
@@ -77,6 +74,12 @@ set_linter_options
 for subdir in $INPUT_SUBDIRECTORIES; do
     analyze_subdir "$subdir"
 done
+
+csgrep \
+    --mode=sarif \
+    --set-scan-prop="tool:vcs-diff-lint" \
+    --set-scan-prop="tool-url:https://github.com/fedora-copr/vcs-diff-lint#readme" \
+< "$rootdir"/output.sarif.err > "$rootdir"/output.sarif
 
 echo "sarif=output.sarif" >> "${GITHUB_OUTPUT}"
 

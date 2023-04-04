@@ -12,21 +12,10 @@ on:
   pull_request:
     branches: [ main ]
 
-permissions:
-  contents: read
-
 jobs:
   lint:
     runs-on: ubuntu-latest
     if: github.event_name != 'push'
-    permissions:
-      # required for all workflows
-      security-events: write
-
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-
     steps:
       - name: Repository checkout
         uses: actions/checkout@v3

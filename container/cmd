@@ -63,17 +63,21 @@ analyze_subdir()
     vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
 }
 
-git config --global --add safe.directory '*'
-git config --global advice.detachedHead false
-git fetch origin "$target_branch:$target_branch" &>/dev/null
+if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
+    git config --global --add safe.directory '*'
+    git config --global advice.detachedHead false
+    git fetch origin "$target_branch:$target_branch" &>/dev/null
 
-test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
-test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.
+    test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
+    test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.
 
-set_linter_options
-for subdir in $INPUT_SUBDIRECTORIES; do
-    analyze_subdir "$subdir"
-done
+    set_linter_options
+    for subdir in $INPUT_SUBDIRECTORIES; do
+        analyze_subdir "$subdir"
+    done
+else
+    touch "$rootdir/output.sarif.err"
+fi
 
 csgrep \
     --mode=sarif \

@@ -8,6 +8,8 @@ This action is built on top of [VCS Diff Lint](https://github.com/fedora-copr/vc
 name: Differential Linters
 
 on:
+  # For push, we "do nothing".  But it needs to be specified, see #17
+  push:
   pull_request:
     branches: [ main ]
 
@@ -34,18 +36,18 @@ jobs:
         name: VCS Diff Lint
         uses: fedora-copr/vcs-diff-lint-action@v1
 
-      - if: ${{ always() }}
-        name: Upload artifact with detected defects in SARIF format
+      - name: Upload artifact with detected defects in SARIF format
         uses: actions/upload-artifact@v3
         with:
           name: VCS Diff Lint SARIF
           path: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
+        if: ${{ always() }}
 
-      - if: ${{ always() }}
-        name: Upload SARIF to GitHub using github/codeql-action/upload-sarif
+      - name: Upload SARIF to GitHub using github/codeql-action/upload-sarif
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
+        if: ${{ always() }}
 ```
 
 ## Options

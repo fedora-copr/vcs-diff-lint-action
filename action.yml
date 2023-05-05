@@ -27,6 +27,7 @@ inputs:
       utility (see the `--linter-tags` option). By default all linters are
       selected. Avaliable linter tags are `mypy`, `pylint`, and `python`.
     required: false
+    default: "pylint"
 
   debug:
     description: Turn on debugging info.

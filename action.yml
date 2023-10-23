@@ -29,6 +29,12 @@ inputs:
     required: false
     default: "pylint"
 
+  install_rpm_packages:
+    description: |
+      Space-separated list of RPM packages that are automatically installed into
+      the testing environment (= Docker container).
+    required: false
+
   debug:
     description: Turn on debugging info.
     default: 'false'

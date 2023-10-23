@@ -63,6 +63,11 @@ analyze_subdir()
     vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
 }
 
+if test -n "$INPUT_INSTALL_RPM_PACKAGES"; then
+    # shellcheck disable=SC2086
+    dnf install -y $INPUT_INSTALL_RPM_PACKAGES
+fi
+
 if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global --add safe.directory '*'
     git config --global advice.detachedHead false

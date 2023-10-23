@@ -87,6 +87,14 @@ Comma-separated list of linter tags (selectors) for the `vcs-diff-lint` utility 
 * default value: `undefined`
 * requirements: `optional`
 
+### install\_rpm\_packages
+
+Space-separated list of RPM packages that are automatically installed into the
+testing environment (= Docker container).
+
+* default value: `undefined`
+* requirements: `optional`
+
 ### debug
 
 Turn on debugging info.

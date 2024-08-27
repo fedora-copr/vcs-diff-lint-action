@@ -23,9 +23,9 @@ inputs:
 
   linter_tags:
     description: |
-      Comma-separated list of linter tags (selectors) for the `vcs-diff-lint`
+      Space-separated list of linter tags (selectors) for the `vcs-diff-lint`
       utility (see the `--linter-tags` option). By default all linters are
-      selected. Avaliable linter tags are `mypy`, `pylint`, and `python`.
+      selected. Avaliable linter tags are `mypy`, `pylint`, `ruff`, and `python`.
     required: false
     default: "pylint"
 

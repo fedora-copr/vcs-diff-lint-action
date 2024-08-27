@@ -82,7 +82,9 @@ Equivalent to `subdirectory` option, but multiplied. Space separated list of sub
 
 ### linter_tags
 
-Comma-separated list of linter tags (selectors) for the `vcs-diff-lint` utility (see the `--linter-tags` option). By default all linters are selected. Avaliable linter tags are `mypy`, `pylint`, and `python`.
+Space-separated list of linter tags (selectors) for the `vcs-diff-lint` utility
+(see the `--linter-tags` option). By default all linters are selected. Avaliable
+linter tags are `mypy`, `pylint`, `ruff`, and `python`.
 
 * default value: `undefined`
 * requirements: `optional`

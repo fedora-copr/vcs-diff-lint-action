@@ -71,6 +71,8 @@ fi
 if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global --add safe.directory '*'
     git config --global advice.detachedHead false
+    git config --global init.defaultBranch main
+
     git fetch origin "$target_branch:$target_branch" &>/dev/null
 
     test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY

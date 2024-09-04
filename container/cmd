@@ -41,7 +41,7 @@ set_linter_options()
 
 populate_sarif_data()
 {
-    vcs-diff-lint "${linter_options[@]}" 2>/dev/null | \
+    vcs-diff-lint "${linter_options[@]}" | \
     csgrep \
         --strip-path-prefix ./ \
         --prepend-path-prefix "$1/" \

@@ -77,6 +77,8 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global --add safe.directory '*'
     git config --global advice.detachedHead false
     git config --global init.defaultBranch main
+    git config --global user.email "vcs-diff-lint@example.com"
+    git config --global user.name "VCS Diff Lint automation"
 
     (
         echo "## Rebasing $INPUT_PULL_REQUEST_HEAD onto $target_branch ##"

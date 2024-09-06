@@ -40,6 +40,11 @@ inputs:
     default: 'false'
     required: false
 
+  debug_all_data:
+    description: The whole GitHub Context expanded
+    default: ${{ toJSON(github) }}
+    required: false
+
   pull_request_number_id:
     description: "The pull request ID (internal)"
     default: ${{ github.event.pull_request.number }}

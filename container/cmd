@@ -24,7 +24,12 @@ is_true() {
 debug_mode=false
 if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
     debug_mode=true
-    ( echo "== GitHub ENV VARS ==" ; env | grep -e ^GITHUB -e ^INPUT_ ) >&2
+    (
+        echo "== GitHub ENV VARS =="
+        env | grep -e ^GITHUB -e ^INPUT_
+        echo "== GitHub Context =="
+        echo "$INPUT_DEBUG_ALL_DATA"
+    ) >&2
     set -x
 fi
 

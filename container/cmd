@@ -96,6 +96,9 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     for subdir in $INPUT_SUBDIRECTORIES; do
         analyze_subdir "$subdir"
     done
+
+    # Return back to the previous git-sha1
+    git checkout "$GITHUB_SHA"
 else
     touch "$rootdir/output.sarif.err"
 fi

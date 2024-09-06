@@ -55,10 +55,10 @@ inputs:
     default: ${{ github.event.pull_request.head.sha }}
     required: false
 
-  pull_request_base:
-    description: "The commit right before the pull-request commits (intenral)"
-    default: ${{ github.event.pull_request.base.sha }}
-    required: true
+  pull_request_commits:
+    description: "Number of commits in this PR"
+    required: false
+    default: ${{ github.event.commits }}
 
 outputs:
   sarif:

@@ -42,7 +42,6 @@ set_linter_options()
     for tag in $INPUT_LINTER_TAGS; do
         linter_options+=( --linter-tag "$tag" )
     done
-    linter_options+=( --compare-against "$INPUT_PULL_REQUEST_BASE" )
 }
 
 populate_sarif_data()
@@ -88,6 +87,10 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
 
     # We don't want to rebase on top of the current upstream's head; the line
     # numbers would be shifted and the provided output would be misleading.
+
+    # Get the last commit before this PR.
+    last_committed=$(git rev-parse "HEAD~$INPUT_PULL_REQUEST_COMMITS")
+    linter_options+=( --compare-against "$last_committed" )
 
     test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
     test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.

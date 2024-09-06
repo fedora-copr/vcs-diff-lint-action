@@ -24,7 +24,7 @@ is_true() {
 }
 
 if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
-    ( echo "== GitHub ENV VARS ==" ; env | grep ^GITHUB ) >&2
+    ( echo "== GitHub ENV VARS ==" ; env | grep -e ^GITHUB -e ^INPUT_ ) >&2
     set -x
 fi
 
@@ -76,7 +76,14 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global advice.detachedHead false
     git config --global init.defaultBranch main
 
-    git fetch origin "$target_branch:$target_branch" &>/dev/null
+    (
+        echo "## Rebasing $INPUT_PULL_REQUEST_HEAD onto $target_branch ##"
+        is_true "$INPUT_DEBUG" || exec &>/dev/null
+        git fetch origin "$target_branch:$target_branch"
+        git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_ID"
+        git checkout "$INPUT_PULL_REQUEST_HEAD"
+        git rebase "origin/$target_branch"
+    )
 
     test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
     test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.

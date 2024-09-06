@@ -47,3 +47,6 @@ outputs:
 runs:
   using: docker
   image: docker://quay.io/copr/vcs-diff-lint:latest
+  env:
+    INPUT_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+    INPUT_PULL_REQUEST_HEAD: ${{ github.event.pull_request.head.sha }}

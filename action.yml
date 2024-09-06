@@ -40,6 +40,16 @@ inputs:
     default: 'false'
     required: false
 
+  pull_request_number_id:
+    description: "The pull requires ID (internal)"
+    default: ${{ github.event.pull_request.number }}
+    required: false
+
+  pull_request_head:
+    description: "The pull requirest SHA1 without merge commit (internal)"
+    default: ${{ github.event.pull_request.head.sha }}
+    required: false
+
 outputs:
   sarif:
     description: 'The SARIF file containing defects'
@@ -47,6 +57,3 @@ outputs:
 runs:
   using: docker
   image: docker://quay.io/copr/vcs-diff-lint:latest
-  env:
-    INPUT_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-    INPUT_PULL_REQUEST_HEAD: ${{ github.event.pull_request.head.sha }}

@@ -41,14 +41,19 @@ inputs:
     required: false
 
   pull_request_number_id:
-    description: "The pull requires ID (internal)"
+    description: "The pull request ID (internal)"
     default: ${{ github.event.pull_request.number }}
     required: false
 
   pull_request_head:
-    description: "The pull requirest SHA1 without merge commit (internal)"
+    description: "The pull request SHA1 without the merge commit (internal)"
     default: ${{ github.event.pull_request.head.sha }}
     required: false
+
+  pull_request_base:
+    description: "The commit right before the pull-request commits (intenral)"
+    default: ${{ github.event.pull_request.base.sha }}
+    required: true
 
 outputs:
   sarif:

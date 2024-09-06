@@ -7,8 +7,6 @@ result=true
 
 error() { echo "DIFF_LINT_ERROR: $*" >&2 ; }
 
-target_branch=${GITHUB_BASE_REF-main}
-
 is_true() {
     [[ $# -le 0 ]] && return 1
 
@@ -39,9 +37,7 @@ set_linter_options()
     for tag in $INPUT_LINTER_TAGS; do
         linter_options+=( --linter-tag "$tag" )
     done
-    if test "$target_branch" != main; then
-        linter_options+=( --compare-against "origin/$target_branch" )
-    fi
+    linter_options+=( --compare-against "$INPUT_PULL_REQUEST_BASE" )
 }
 
 populate_sarif_data()
@@ -77,17 +73,16 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global --add safe.directory '*'
     git config --global advice.detachedHead false
     git config --global init.defaultBranch main
-    git config --global user.email "vcs-diff-lint@example.com"
-    git config --global user.name "VCS Diff Lint automation"
 
     (
-        echo "## Rebasing $INPUT_PULL_REQUEST_HEAD onto $target_branch ##"
+        echo "## Checking out $INPUT_PULL_REQUEST_HEAD ##"
         $debug_mode || exec &>/dev/null
-        git fetch origin "$target_branch:$target_branch"
         git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_ID"
         git checkout "$INPUT_PULL_REQUEST_HEAD"
-        git rebase "origin/$target_branch"
     )
+
+    # We don't want to rebase on top of the current upstream's head; the line
+    # numbers would be shifted and the provided output would be misleading.
 
     test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
     test -z "$INPUT_SUBDIRECTORIES" && INPUT_SUBDIRECTORIES=.

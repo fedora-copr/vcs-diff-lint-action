@@ -78,8 +78,8 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     git config --global advice.detachedHead false
     git config --global init.defaultBranch main
 
+    echo "## New code: $INPUT_PULL_REQUEST_HEAD ##"
     (
-        echo "## Checking out $INPUT_PULL_REQUEST_HEAD ##"
         $debug_mode || exec &>/dev/null
         git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_ID"
         git checkout "$INPUT_PULL_REQUEST_HEAD"
@@ -90,6 +90,7 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
 
     # Get the last commit before this PR.
     last_committed=$(git rev-parse "HEAD~$INPUT_PULL_REQUEST_COMMITS")
+    echo "## Old code: $last_committed ##"
     linter_options+=( --compare-against "$last_committed" )
 
     test -z "$INPUT_SUBDIRECTORY" || INPUT_SUBDIRECTORIES=$INPUT_SUBDIRECTORY
@@ -100,8 +101,12 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
         analyze_subdir "$subdir"
     done
 
-    # Return back to the previous git-sha1
-    git checkout "$GITHUB_SHA"
+    (
+        # Return back to the previous git-sha1, upload-sarif action doesn't
+        # really like mismatches.
+        $debug_mode || exit &>/dev/null
+        git checkout "$GITHUB_SHA"
+    )
 else
     touch "$rootdir/output.sarif.err"
 fi

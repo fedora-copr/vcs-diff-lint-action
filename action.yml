@@ -58,8 +58,7 @@ inputs:
   pull_request_commits:
     description: "Number of commits in this PR"
     required: false
-    default: ${{ github.event.commits }}
-
+    default: ${{ github.event.pull_request.commits }}
 outputs:
   sarif:
     description: 'The SARIF file containing defects'

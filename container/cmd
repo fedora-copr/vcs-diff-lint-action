@@ -98,6 +98,7 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
 
     set_linter_options
     for subdir in $INPUT_SUBDIRECTORIES; do
+        GIT_LFS_SKIP_SMUDGE=1 \
         analyze_subdir "$subdir"
     done
 

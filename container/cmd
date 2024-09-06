@@ -23,7 +23,9 @@ is_true() {
     esac
 }
 
-is_true "$INPUT_DEBUG" && set -x
+if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
+    set -x
+fi
 
 linter_options=()
 set_linter_options()

@@ -104,7 +104,7 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     (
         # Return back to the previous git-sha1, upload-sarif action doesn't
         # really like mismatches.
-        $debug_mode || exit &>/dev/null
+        $debug_mode || exec &>/dev/null
         git checkout "$GITHUB_SHA"
     )
 else

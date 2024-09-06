@@ -23,7 +23,9 @@ is_true() {
     esac
 }
 
+debug_mode=false
 if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
+    debug_mode=true
     ( echo "== GitHub ENV VARS ==" ; env | grep -e ^GITHUB -e ^INPUT_ ) >&2
     set -x
 fi
@@ -31,7 +33,7 @@ fi
 linter_options=()
 set_linter_options()
 {
-    if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
+    if $debug_mode; then
         linter_options+=( --log-level=debug )
     fi
     for tag in $INPUT_LINTER_TAGS; do
@@ -78,7 +80,7 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
 
     (
         echo "## Rebasing $INPUT_PULL_REQUEST_HEAD onto $target_branch ##"
-        is_true "$INPUT_DEBUG" || exec &>/dev/null
+        $debug_mode || exec &>/dev/null
         git fetch origin "$target_branch:$target_branch"
         git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_ID"
         git checkout "$INPUT_PULL_REQUEST_HEAD"

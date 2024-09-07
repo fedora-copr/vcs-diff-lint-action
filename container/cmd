@@ -44,28 +44,34 @@ set_linter_options()
     done
 }
 
-populate_sarif_data()
-{
-    vcs-diff-lint "${linter_options[@]}" | \
+# The first argument is path prefix to append.  The rest of given arguments is
+# passed directly to vcs-diff-lint arguments list.
+vcs_diff_lint()
+(
+    set -o pipefail
+    pp=$1
+    shift
+    vcs-diff-lint "${linter_options[@]}" "$@" | \
     csgrep \
         --strip-path-prefix ./ \
-        --prepend-path-prefix "$1/" \
-        >> "$rootdir/output.sarif.err" \
-    || true
+        --prepend-path-prefix "$pp/"
+)
+
+populate_sarif_data()
+{
+    vcs_diff_lint "$1" >> "$rootdir/output.sarif.err" || true
 }
 
 analyze_subdir()
 {
-    echo
     echo "## Linting in '$1' subdirectory ##"
-    echo
     cd "$rootdir/$1" 2>/dev/null || {
         error "Directory '$1' not found"
         result=false
         return
     }
     populate_sarif_data "$1"
-    vcs-diff-lint --print-fixed-errors "${linter_options[@]}" || result=false
+    vcs_diff_lint "$1" --print-fixed-errors || result=false
 }
 
 if test -n "$INPUT_INSTALL_RPM_PACKAGES"; then

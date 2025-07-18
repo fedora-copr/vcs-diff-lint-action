@@ -1,6 +1,6 @@
 #! /bin/bash -e
 
-# Rebuild quay.io bump: 3
+# Rebuild quay.io bump: 1
 
 rootdir=$(pwd)
 result=true

@@ -95,8 +95,14 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     # numbers would be shifted and the provided output would be misleading.
 
     if test -z "$INPUT_PULL_REQUEST_COMMITS" ; then
-        # This happens in Forgejo.
-        last_committed=$(echo "$INPUT_DEBUG_ALL_DATA" | jq -r .event.pull_request.base.sha)
+        # This happens in Forgejo where we don't have
+        # github.event.pull_request.commits; find this info manually.
+
+        # Get the current "main" branch.
+        git fetch origin "$GITHUB_BASE_REF" --depth=1000
+
+        # Common ancestor = where we diverged from "main".
+        last_committed=$(git merge-base origin/$GITHUB_BASE_REF HEAD)
     else
         last_committed=$(git rev-parse "HEAD~$INPUT_PULL_REQUEST_COMMITS")
     fi

@@ -8,8 +8,6 @@ COPY fedora-infra.repo /etc/yum.repos.d/
 
 RUN dnf -y update && \
     dnf -y install dnf-plugins-core && \
-    dnf -y copr enable @copr/vcs-diff-lint && \
-    dnf -y copr enable @codescan/csutils && \
     dnf install -y vcs-diff-lint git git-lfs jq && \
     dnf clean all
 

@@ -94,8 +94,14 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     # We don't want to rebase on top of the current upstream's head; the line
     # numbers would be shifted and the provided output would be misleading.
 
+    if test -z "$INPUT_PULL_REQUEST_COMMITS" ; then
+        # This happens in Forgejo.
+        last_committed=$(echo "$INPUT_DEBUG_ALL_DATA" | jq -r .event.pull_request.base.sha)
+    else
+        last_committed=$(git rev-parse "HEAD~$INPUT_PULL_REQUEST_COMMITS")
+    fi
+
     # Get the last commit before this PR.
-    last_committed=$(git rev-parse "HEAD~$INPUT_PULL_REQUEST_COMMITS")
     echo "## Old code: $last_committed ##"
     linter_options+=( --compare-against "$last_committed" )
 

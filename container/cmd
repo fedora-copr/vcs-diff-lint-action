@@ -87,7 +87,7 @@ if test "$GITHUB_EVENT_NAME" = 'pull_request'; then
     echo "## New code: $INPUT_PULL_REQUEST_HEAD ##"
     (
         $debug_mode || exec &>/dev/null
-        git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_ID"
+        git fetch origin "+$INPUT_PULL_REQUEST_HEAD:refs/remotes/pull-requests/pr-detached-$INPUT_PULL_REQUEST_NUMBER_ID"
         git checkout "$INPUT_PULL_REQUEST_HEAD"
     )
 

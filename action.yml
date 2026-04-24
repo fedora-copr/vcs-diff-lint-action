@@ -65,4 +65,4 @@ outputs:
 
 runs:
   using: docker
-  image: docker://quay.io/copr/vcs-diff-lint:latest
+  image: docker://quay.io/copr/vcs-diff-lint:v1.14.0

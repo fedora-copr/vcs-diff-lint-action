@@ -1,6 +1,6 @@
 #! /bin/bash -e
 
-# Rebuild quay.io bump: 3
+# Rebuild quay.io bump: 1
 
 rootdir=$(pwd)
 result=true
@@ -22,6 +22,15 @@ is_true() {
 }
 
 debug_mode=false
+
+{
+    echo -n "== SW in container: "
+    for i in $(rpm -qa | grep -i -e vcs-diff-lint -e yamllint -e pylint -e ruff); do
+        echo -n "$i "
+    done
+    echo "=="
+} >&2
+
 if is_true "$INPUT_DEBUG" || is_true "$RUNNER_DEBUG"; then
     debug_mode=true
     (
